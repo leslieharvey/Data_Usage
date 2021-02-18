@@ -58,9 +58,6 @@ class HTMLTemplate:
     </div>
     """
 
-    def __init__(self):
-        super()
-
     def __create_table_row(self, username, usage):
         """
         This function returns a string of a table row for an indivual user.
@@ -134,6 +131,7 @@ class HTMLTemplate:
 
         return user_rows_string
 
+    # cls instead of self (@classmethod)
     def create_html(self, data):
         """
         This function returns a string of all the table rows for all the users
