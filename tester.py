@@ -50,6 +50,3 @@ html_data = html.create_html(owner_data)
 # write HTML file with all aggregated data
 with open("result.html", "w") as file:
     file.write(html_data)
-
-# look into error catching (test: '/blue/renne/ds/ref_dbs/fasta/Ecoli_ASM584v2/dmel-all-chromosome-r6.35.fasta.gz.notes.txt')
-# scp / filzilla

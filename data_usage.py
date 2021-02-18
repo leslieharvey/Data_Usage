@@ -42,9 +42,12 @@ def main_function(**kwargs):
             file_size = file_nav.get_file_size(file_path)
             file_owner = file_nav.get_file_owner(file_path)
         except(OSError):
-            print("Could not open: "  + file_path)
+            sys.stdout.write("Could not open: " + file_path + "\n")
             continue
-
+        except(KeyError):
+            sys.stdout.write("Key Error for: " + file_path+ "\n")
+            continue
+        
         if file_owner not in owners:
             owners[file_owner] = TreeNode(file_owner)
 
