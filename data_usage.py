@@ -22,7 +22,7 @@ def drawProgressBar(percent, barLen = 20):
     sys.stdout.write("[{:<{}}] {:.0f}%".format("=" * int(barLen * percent), barLen, percent * 100))
     sys.stdout.flush()
 
-def main_function(**kwargs):
+def main_function(f, **kwargs):
     """
     Runs the Data Usage specification
     """
@@ -42,10 +42,10 @@ def main_function(**kwargs):
             file_size = file_nav.get_file_size(file_path)
             file_owner = file_nav.get_file_owner(file_path)
         except(OSError):
-            sys.stdout.write("Could not open: " + file_path + "\n")
+            f.write("Could not open: " + file_path + "\n")
             continue
         except(KeyError):
-            sys.stdout.write("Key Error for: " + file_path+ "\n")
+            f.write("Key Error for: " + file_path+ "\n")
             continue
         
         if file_owner not in owners:
@@ -65,16 +65,16 @@ def main_function(**kwargs):
     html_data = html.create_html(owner_data)
 
     # write HTML file with all aggregated data
-    with open("result.html", "w") as file:
-        file.write(html_data)
+    with open("result.html", "w") as f_html:
+        f_html.write(html_data)
 
     if kwargs['write']:
         # -----Write File Structure-----
-        with open("file_tree.txt", "w") as file:
+        with open("file_tree.txt", "w") as f_tree:
             for o in owners:
-                file.write("-----" + o + "-----" + "\n")
-                owners[o].write_node_data(file)
-                file.write("\n")
+                f_tree.write("-----" + o + "-----" + "\n")
+                owners[o].write_node_data(f_tree)
+                f_tree.write("\n")
 
 def _dir_exists(dir_name, dir_type=''):
     """
@@ -122,5 +122,6 @@ if __name__ == '__main__':
     args_info = parse_args()
     if not args_info:
         sys.exit()
-    main_function(**args_info)
+    with open("error_log.txt", "w") as f:
+        main_function(f, **args_info)
 
