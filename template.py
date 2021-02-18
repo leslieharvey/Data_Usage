@@ -134,6 +134,7 @@ class HTMLTemplate:
 
         return user_rows_string
 
+    # cls instead of self (@classmethod)
     def create_html(self, data):
         """
         This function returns a string of all the table rows for all the users
