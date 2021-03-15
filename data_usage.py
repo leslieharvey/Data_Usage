@@ -10,6 +10,7 @@ import sys
 from tree_node import TreeNode
 from file_nav import FileNav
 from template import HTMLTemplate
+from tester import createOutput
 
 DEFAULT_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -31,49 +32,14 @@ def main_function(f, **kwargs):
 
     run_path = kwargs['path']
 
-    # get a list of all the files in the root directory
-    file_nav = FileNav(run_path)
-    file_list = file_nav.get_files(recurse=True)
-    owners = {}
-
-    # each file is processed into a TreeNode structure
-    for i, file_path in enumerate(file_list):
-        try:
-            file_size = file_nav.get_file_size(file_path)
-            file_owner = file_nav.get_file_owner(file_path)
-        except(OSError):
-            f.write("Could not open: " + file_path + "\n")
-            continue
-        except(KeyError):
-            f.write("Key Error for: " + file_path+ "\n")
-            continue
-        
-        if file_owner not in owners:
-            owners[file_owner] = TreeNode(file_owner)
-
-        owners[file_owner].create_node(run_path, file_path, file_size)
-        drawProgressBar((i+1)/len(file_list))
-    sys.stdout.write("\n")
-
-    # structure owner data into required format
-    owner_data = {}
-    for o in owners:
-        owner_data[o] = round(owners[o].memory_size, 2)
-
-    # create HTML file
-    html = HTMLTemplate()
-    html_data = html.create_html(owner_data)
-
-    # write HTML file with all aggregated data
-    with open("result.html", "w") as f_html:
-        f_html.write(html_data)
+    owner_data = createOutput(run_path, f)
 
     if kwargs['write']:
         # -----Write File Structure-----
         with open("file_tree.txt", "w") as f_tree:
-            for o in owners:
+            for o in owner_data:
                 f_tree.write("-----" + o + "-----" + "\n")
-                owners[o].write_node_data(f_tree)
+                owner_data[o].write_node_data(f_tree)
                 f_tree.write("\n")
 
 def _dir_exists(dir_name, dir_type=''):
