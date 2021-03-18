@@ -24,7 +24,9 @@ class HTMLTemplate:
                     margin-left: 0;
                     "
                 >
-                    Member Usage
+    """
+    # place section_label here
+    top_sub_2 = """
                 </h3>
                 </td>
             </tr>
@@ -36,7 +38,7 @@ class HTMLTemplate:
                     <b>
     """
     # place left_justify_label here
-    top_sub_2 = """
+    top_sub_3 = """
                     </b>
                 </p>
                 </td>
@@ -53,22 +55,23 @@ class HTMLTemplate:
                     <b>
     """
     # place right_justify_label here
-    top_sub_3 = """
+    top_sub_4 = """
                     </b>
                 </p>
                 </td>
             </tr>
     """
 
-    def _create_top_labels(self, left_justify_label, right_justify_label):
+    def _create_top_labels(self, section_label, left_justify_label, right_justify_label):
         """
         This function returns a string of the top portion of the HTML template
 
         Args:
+            section_label (str): A string representing the section label of the HTML table
             left_justify_label (str): A string representing the label of the left table column
             right_justify_label (str): A string representing the label of the right table column
         """
-        return self.top_sub_1 + left_justify_label + self.top_sub_2 + right_justify_label  + self.top_sub_3
+        return self.top_sub_1 + section_label + self.top_sub_2 + left_justify_label + self.top_sub_3 + right_justify_label  + self.top_sub_4
 
     bottom = """
             </tbody>
@@ -150,11 +153,12 @@ class HTMLTemplate:
         return data_rows_string
 
     # cls instead of self (@classmethod)
-    def create_html(self, left_justify_label, right_justify_label, data):
+    def create_html(self, section_label, left_justify_label, right_justify_label, data):
         """
         This function returns a string of all the table rows for all the users
 
         Args:
+            section_label (str): A string representing the section label of the HTML table
             left_justify_label (str): A string representing the label of the left table column
             right_justify_label (str): A string representing the label of the right table column
             data (dict): A dictionary containing the data label and value of a dataset
@@ -169,4 +173,4 @@ class HTMLTemplate:
             str: A str representing the complete HTML template compiled from dyanmic data
         """
         data_rows = self.__create_data_rows(data)
-        return self._create_top_labels(left_justify_label, right_justify_label) + data_rows + self.bottom
+        return self._create_top_labels(section_label, left_justify_label, right_justify_label) + data_rows + self.bottom
