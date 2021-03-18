@@ -10,7 +10,7 @@ import sys
 from tree_node import TreeNode
 from file_nav import FileNav
 from template import HTMLTemplate
-from generate import createOutput
+from generate import createOutput, writeOwnerData
 
 DEFAULT_PATH = os.path.dirname(os.path.abspath(__file__))
 
@@ -30,11 +30,7 @@ def main_function(f, **kwargs):
 
     if kwargs['write']:
         # -----Write File Structure-----
-        with open("file_tree.txt", "w") as f_tree:
-            for o in owner_data:
-                f_tree.write("-----" + o + "-----" + "\n")
-                owner_data[o].write_node_data(f_tree)
-                f_tree.write("\n")
+        writeOwnerData(owner_data)
 
 def _dir_exists(dir_name, dir_type=''):
     """

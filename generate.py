@@ -49,6 +49,13 @@ def createOutput(run_path, error_log):
 
     return owners
 
+def writeOwnerData(owner_data, file_name="file_tree.txt"):
+    with open(file_name, "w") as f_tree:
+        for o in owner_data:
+            f_tree.write("-----" + o + "-----" + "\n")
+            owner_data[o].write_node_data(f_tree)
+            f_tree.write("\n")
+
 # -----Print File Structure-----
 # for o in owners:
 #     print("-----" + o + "-----")
