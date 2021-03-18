@@ -43,7 +43,8 @@ class TreeNode:
         files (dict): The files in the TreeNode object
         directories (dict): The directories in the TreeNode object
     """
-    def __init__(self, owner):
+    def __init__(self, owner, level_name = "ROOT"):
+        self.level_name = level_name
         self.owner = owner
         self.files = {}
         self.directories = {}
@@ -81,7 +82,7 @@ class TreeNode:
             # If successful, then element is a directory
             element = child_path[:child_path.index("/")]
             if element not in self.directories:
-                self.directories[element] = TreeNode(element)
+                self.directories[element] = TreeNode(self.owner, element)
             
             directory_node = self.directories[element]
             directory_node.create_node(root_path + str(element), file_path, file_size)
@@ -127,6 +128,78 @@ class TreeNode:
       
         for f in self.files:
             self.files[f].write_file_data(file, increased_indent)
+
+    def __get_files_including_sub_directories(self, return_files = []):
+        """
+        This function is a recursive call to begin at a directory and collect all the
+        files at that level, including ones in sub-directories
+
+        Args:
+            return_files (list): The list where files will be added to
+        
+        Returns:
+            list: A list of File objects representing the files
+        """
+        return_files += self.files.values()
+        for d in self.directories:
+            self.directories[d].__get_files_including_sub_directories(return_files)
+
+        return return_files
+
+    def __get_directories_including_sub_directories(self, return_directories = []):
+        """
+        This function is a recursive call to begin at a directory and collect all the
+        directories at that level, including ones in sub-directories
+
+        Args:
+            return_directories (list): The list where directories will be added to
+        
+        Returns:
+            list: A list of TreeNode objects representing the directories
+        """
+        return_directories += self.directories.values()
+        for d in self.directories:
+            self.directories[d].__get_directories_including_sub_directories(return_directories)
+
+        return return_directories
+
+    def largest_files(self, amount_limit = -1):
+        """
+        This function will return the largest files relative to the TreeNode position
+        the function is called on. The return will include files at the current level.
+        The returned list will be ordered in a decresing format.
+
+        Args:
+            amount_limit (list): The limit of largest files to return. If no value 
+                specified, all files are returned
+        
+        Returns:
+            list: A list of TreeNode objects representing the largest files
+        """
+
+        all_files = self.__get_files_including_sub_directories()
+        sorted_files = sorted(all_files, key=lambda item: item.file_size, reverse=True)
+        
+        return sorted_files if amount_limit == -1 else sorted_files[:amount_limit]
+
+    def largest_directories(self, amount_limit = -1):
+        """
+        This function will return the largest directories relative to the TreeNode position
+        the function is called on. The return will not include the TreeNode (directory) it
+        is called on. The returned list will be ordered in a decresing format.
+
+        Args:
+            amount_limit (list): The limit of largest directories to return. If no value 
+                specified, all directories are returned
+        
+        Returns:
+            list: A list of TreeNode objects representing the largest directories
+        """
+
+        all_directories = self.__get_directories_including_sub_directories()
+        sorted_directories = sorted(all_directories, key=lambda item: item.memory_size, reverse=True)
+        
+        return sorted_directories if amount_limit == -1 else sorted_directories[:amount_limit]
         
     
     
