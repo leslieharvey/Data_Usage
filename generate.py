@@ -9,8 +9,6 @@ def drawProgressBar(percent, barLen = 20):
     sys.stdout.write("[{:<{}}] {:.0f}%".format("=" * int(barLen * percent), barLen, percent * 100))
     sys.stdout.flush()
 
-# run_path = "/mnt/c/Coding_Projects/Renne_Lab/Data_Usage/TEST"
-
 def createOutput(run_path, error_log):
     # get a list of all the files in the root directory
     file_nav = FileNav(run_path)

@@ -10,18 +10,12 @@ import sys
 from tree_node import TreeNode
 from file_nav import FileNav
 from template import HTMLTemplate
-from tester import createOutput
+from generate import createOutput
 
 DEFAULT_PATH = os.path.dirname(os.path.abspath(__file__))
 
 if __name__ == '__main__':
     sys.path.append(os.path.join('..', os.path.dirname(__file__)))
-
-def drawProgressBar(percent, barLen = 20):
-    # percent float from 0 to 1. 
-    sys.stdout.write("\r")
-    sys.stdout.write("[{:<{}}] {:.0f}%".format("=" * int(barLen * percent), barLen, percent * 100))
-    sys.stdout.flush()
 
 def main_function(f, **kwargs):
     """
