@@ -40,8 +40,7 @@ def createOutput(run_path, error_log):
         owner_data[o] = round(owners[o].memory_size, 2)
 
     # create HTML file
-    html = HTMLTemplate()
-    html_data = html.create_html("Member Usage", "Username", "Data Usage (GB)", owner_data)
+    html_data = HTMLTemplate.create_html("Member Usage", "Username", "Data Usage (GB)", owner_data)
 
     # write HTML file with all aggregated data
     with open("result.html", "w") as f_html:

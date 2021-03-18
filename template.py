@@ -4,6 +4,28 @@ class HTMLTemplate:
     template populated with dynamic data.
     """
 
+    def __init__(self, section_label, left_justify_label, right_justify_label, data):
+        """
+        This function returns a string of all the table rows for all the users
+
+        Args:
+            section_label (str): A string representing the section label of the HTML table
+            left_justify_label (str): A string representing the label of the left table column
+            right_justify_label (str): A string representing the label of the right table column
+            data (dict): A dictionary containing the data label and value of a dataset
+                The input object has the form::
+                        {
+                         'data_row': 0.00,
+                         'data_row2': 0.00,
+                         ...
+                        }
+        """
+
+        self.section_label = section_label
+        self.left_justify_label = left_justify_label
+        self.right_justify_label = right_justify_label
+        self.data = data
+
     top_sub_1 = """
         <div lang="en-US" link="blue" vlink="purple" style="word-wrap: break-word">
         <p style="font-size: 11pt; font-family: Calibri, sans-serif; margin: 0">
@@ -61,23 +83,17 @@ class HTMLTemplate:
                 </td>
             </tr>
     """
-
-    def _create_top_labels(self, section_label, left_justify_label, right_justify_label):
-        """
-        This function returns a string of the top portion of the HTML template
-
-        Args:
-            section_label (str): A string representing the section label of the HTML table
-            left_justify_label (str): A string representing the label of the left table column
-            right_justify_label (str): A string representing the label of the right table column
-        """
-        return self.top_sub_1 + section_label + self.top_sub_2 + left_justify_label + self.top_sub_3 + right_justify_label  + self.top_sub_4
-
     bottom = """
             </tbody>
         </table>
         </div>
     """
+
+    def __create_top_labels(self):
+        """
+        This function returns a string of the top portion of the HTML template
+        """
+        return self.top_sub_1 + self.section_label + self.top_sub_2 + self.left_justify_label + self.top_sub_3 + self.right_justify_label  + self.top_sub_4
 
     def __create_table_row(self, left_justify, right_justify):
         """
@@ -152,8 +168,8 @@ class HTMLTemplate:
 
         return data_rows_string
 
-    # cls instead of self (@classmethod)
-    def create_html(self, section_label, left_justify_label, right_justify_label, data):
+    @classmethod
+    def create_html(cls, section_label, left_justify_label, right_justify_label, data):
         """
         This function returns a string of all the table rows for all the users
 
@@ -172,5 +188,6 @@ class HTMLTemplate:
         Returns:
             str: A str representing the complete HTML template compiled from dyanmic data
         """
-        data_rows = self.__create_data_rows(data)
-        return self._create_top_labels(section_label, left_justify_label, right_justify_label) + data_rows + self.bottom
+        html = cls(section_label, left_justify_label, right_justify_label, data)
+        data_rows = html.__create_data_rows(data)
+        return html.__create_top_labels() + data_rows + html.bottom
