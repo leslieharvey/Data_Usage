@@ -43,8 +43,9 @@ class TreeNode:
         files (dict): The files in the TreeNode object
         directories (dict): The directories in the TreeNode object
     """
-    def __init__(self, owner, level_name = "ROOT"):
+    def __init__(self, owner, level_name = "ROOT", from_path = ""):
         self.level_name = level_name
+        self.path = from_path + level_name + "/"
         self.owner = owner
         self.files = {}
         self.directories = {}
@@ -82,7 +83,7 @@ class TreeNode:
             # If successful, then element is a directory
             element = child_path[:child_path.index("/")]
             if element not in self.directories:
-                self.directories[element] = TreeNode(self.owner, element)
+                self.directories[element] = TreeNode(self.owner, element, self.path)
             
             directory_node = self.directories[element]
             directory_node.create_node(root_path + str(element), file_path, file_size)

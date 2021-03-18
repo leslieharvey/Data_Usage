@@ -59,7 +59,7 @@ def writeOwnerData(owner_data, file_name="file_tree.txt"):
 def createOwnerHTML(name, owner_root):
     owner_largest_directories = owner_root.largest_directories(4)
     owner_data = {}
-    for directory in owner_largest_directories : owner_data[directory.level_name] = directory.memory_size
+    for directory in owner_largest_directories : owner_data[directory.path] = directory.memory_size
     
     # create overall HTML file
     html_data = HTMLTemplate.create_html("Largest Directories - " + name, "Directory Path", "Data Usage (GB)", owner_data)
