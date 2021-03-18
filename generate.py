@@ -41,7 +41,7 @@ def createOutput(run_path, error_log):
 
     # create HTML file
     html = HTMLTemplate()
-    html_data = html.create_html(owner_data)
+    html_data = html.create_html("Username", "Data Usage (GB)", owner_data)
 
     # write HTML file with all aggregated data
     with open("result.html", "w") as f_html:
