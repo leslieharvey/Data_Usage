@@ -3,10 +3,17 @@ from file_nav import FileNav
 from template import HTMLTemplate
 import sys
 
-def drawProgressBar(percent, barLen = 20):
+def __drawProgressBar(percent, bar_length = 20):
+    """
+    This function will draw a progress status bar
+
+    Args:
+        percent (float): The percent of the operation completed.
+        bar_length (int): The length of the desired progress bar.
+    """
     # percent float from 0 to 1. 
     sys.stdout.write("\r")
-    sys.stdout.write("[{:<{}}] {:.0f}%".format("=" * int(barLen * percent), barLen, percent * 100))
+    sys.stdout.write("[{:<{}}] {:.0f}%".format("=" * int(bar_length * percent), bar_length, percent * 100))
     sys.stdout.flush()
 
 def createOutput(run_path, error_log, depth_limit=-1):
@@ -31,7 +38,7 @@ def createOutput(run_path, error_log, depth_limit=-1):
             owners[file_owner] = TreeNode(file_owner)
 
         owners[file_owner].create_node(run_path, file_path, file_size)
-        drawProgressBar((i+1)/len(file_list))
+        __drawProgressBar((i+1)/len(file_list))
     sys.stdout.write("\n")
 
     # structure owner data into required format
@@ -53,6 +60,21 @@ def createOutput(run_path, error_log, depth_limit=-1):
     return owners
 
 def writeOwnerFileTree(owner_data, file_name="file_tree.txt", depth_limit=-1):
+    """
+    This function writes the file tree structure for all the owners identified.
+
+    Args:
+        owner_data (dict): A dictionary containing the data label and value of a row
+            The input object has the form::
+                    {
+                        'data_row': 0.00,
+                        'data_row2': 0.00,
+                        ...
+                    }
+        file_name (str): The name for the output file.
+        depth_limit (int): The depth limit to write for the outputs.
+    """
+
     with open(file_name, "w") as f_tree:
         for o in owner_data:
             f_tree.write("-----" + o + "-----" + "\n")
@@ -60,6 +82,13 @@ def writeOwnerFileTree(owner_data, file_name="file_tree.txt", depth_limit=-1):
             f_tree.write("\n")
 
 def createOwnerHTML(name, owner_root, depth_limit=-1):
+    """
+    This function creates an HTML output for each owner
+
+    Args:
+        owner_root (TreeNode): The TreeNode root object for the specified owner
+        depth_limit (int): The depth limit to write for the outputs
+    """
     # retrieve the 4 largest directories
     owner_largest_directories = owner_root.largest_directories(depth_limit)
     owner_data = {}
