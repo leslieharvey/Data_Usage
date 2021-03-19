@@ -33,6 +33,7 @@ def createOutput(run_path, error_log, depth_limit=-1):
 
     # each file is processed into a TreeNode structure
     for i, file_path in enumerate(file_list):
+        __drawProgressBar((i+1)/len(file_list))
         try:
             file_size = file_nav.get_file_size(file_path)
             file_owner = file_nav.get_file_owner(file_path)
@@ -47,7 +48,6 @@ def createOutput(run_path, error_log, depth_limit=-1):
             owners[file_owner] = TreeNode(file_owner)
 
         owners[file_owner].create_node(run_path, file_path, file_size)
-        __drawProgressBar((i+1)/len(file_list))
     sys.stdout.write("\n")
 
     # structure owner data into required format
