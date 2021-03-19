@@ -186,7 +186,7 @@ class TreeNode:
             list: A list of TreeNode objects representing the largest files
         """
 
-        all_files = self.__get_files_including_sub_directories()
+        all_files = self.__get_files_including_sub_directories([])
         sorted_files = sorted(all_files, key=lambda item: item.file_size, reverse=True)
         
         return sorted_files if amount_limit == -1 else sorted_files[:amount_limit]
@@ -205,7 +205,7 @@ class TreeNode:
             list: A list of TreeNode objects representing the largest directories
         """
 
-        all_directories = self.__get_directories_including_sub_directories()
+        all_directories = self.__get_directories_including_sub_directories([])
         sorted_directories = sorted(all_directories, key=lambda item: item.memory_size, reverse=True)
         
         return sorted_directories if amount_limit == -1 else sorted_directories[:amount_limit]
