@@ -28,7 +28,7 @@ class File:
         This writes out the file information in a user friendly format.
 
         Args:
-            file(IO): file to write the data to
+            file (IO): file to write the data to
             indent (str): The amount of indent to make the output user friendly
         """
         file.write(indent + self.file_name + " | " + str(self.file_size) + " GB" + "\n")  

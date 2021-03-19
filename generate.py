@@ -17,6 +17,15 @@ def __drawProgressBar(percent, bar_length = 20):
     sys.stdout.flush()
 
 def createOutput(run_path, error_log, depth_limit=-1):
+    """
+    This function creates the output of the overall script
+
+    Args:
+        run_path (str): The complete path of the target directory.
+        error_log (IO): The IO file to write errors to.
+        depth_limit (int): The depth limit to write for the outputs
+    """
+
     # get a list of all the files in the root directory
     file_nav = FileNav(run_path)
     file_list = file_nav.get_files(recurse=True)
