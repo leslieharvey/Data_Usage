@@ -1,6 +1,7 @@
 from os import walk
 from os import stat
 import os
+import sys
 from pwd import getpwuid
 
 # Based on:
@@ -30,8 +31,14 @@ class FileNav:
         """
         files = []
         for (dirpath, _, filenames) in walk(self.current_path):
+            sys.stdout.write("\r")
+            sys.stdout.write("Executing...")
+            
             filenames_with_path = [os.path.join(dirpath, name) for name in filenames]
             files.extend(filenames_with_path)
+
+            sys.stdout.flush()
+
             if not recurse:
                 break
         return files

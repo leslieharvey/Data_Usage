@@ -130,3 +130,7 @@ dmypy.json
 
 TEST/*
 .vscode/*
+
+error_log.txt
+file_tree.txt
+*result.html
