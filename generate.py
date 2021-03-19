@@ -57,7 +57,8 @@ def createOutput(run_path, error_log, depth_limit=-1):
         createOwnerHTML(o, owners[o], depth_limit)
 
     # sort owner_data in descending order
-    sorted_owner_data = {k: v for k, v in sorted(owner_data.items(), key=lambda item: item[1], reverse=True)}
+    owner_items_list = sorted(owner_data.items(), key=lambda item: item[1], reverse=True)
+    sorted_owner_data = {k: v for k, v in owner_items_list}
 
     # create overall HTML file
     html_data = HTMLTemplate.create_html("Member Usage", "Username", "Data Usage (GB)", sorted_owner_data)
@@ -98,8 +99,13 @@ def createOwnerHTML(name, owner_root, depth_limit=-1):
         owner_root (TreeNode): The TreeNode root object for the specified owner
         depth_limit (int): The depth limit to write for the outputs
     """
-    # retrieve the 4 largest directories
-    owner_largest_directories = owner_root.largest_directories(depth_limit)
+    # retrieve the largest directories
+    # note: because of project requirements, this syntax will traverse the sub-directory of a user's folder
+    # ex: gather largest directories at ROOT/leslie.harvey
+    owner_largest_directories = []
+    for d in owner_root.directories.values():
+        owner_largest_directories += d.largest_directories(depth_limit)
+    
     owner_data = {}
     for directory in owner_largest_directories : owner_data[directory.path] = directory.memory_size
     
