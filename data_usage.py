@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # Leslie O. Harvey III
 # Changelog:
-#   2020-02-18 : v01, Initial Version
+#   2020-03-18 : v01, Initial Version
 """This script produces an HTML output of the current data usage"""
 
 import argparse
@@ -10,9 +10,10 @@ import sys
 from tree_node import TreeNode
 from file_nav import FileNav
 from template import HTMLTemplate
-from generate import createOutput, writeOwnerData
+from generate import createOutput, writeOwnerFileTree
 
 DEFAULT_PATH = os.path.dirname(os.path.abspath(__file__))
+DEFAULT_DEPTH = 4
 
 if __name__ == '__main__':
     sys.path.append(os.path.join('..', os.path.dirname(__file__)))
@@ -21,16 +22,16 @@ def main_function(f, **kwargs):
     """
     Runs the Data Usage specification
     """
-    required_args = ['path']
+    required_args = ['path', 'depth']
     _check_req_args(required_args, kwargs, 'data_usage')
 
     run_path = kwargs['path']
 
-    owner_data = createOutput(run_path, f)
+    owner_data = createOutput(run_path, f, depth_limit=kwargs['depth'])
 
     if kwargs['write']:
         # -----Write File Structure-----
-        writeOwnerData(owner_data)
+        writeOwnerFileTree(owner_data, depth_limit=kwargs['depth'])
 
 def _dir_exists(dir_name, dir_type=''):
     """
@@ -61,6 +62,8 @@ def parse_args(print_help=False):
     in_opts = parser.add_argument_group('Input Options')
     in_opts.add_argument('-p', '--path', default=DEFAULT_PATH, type=_dir_exists,
                          help='The specified path to run the analyis on')
+    in_opts.add_argument('-d', '--depth', default=DEFAULT_DEPTH, type=int,
+                         help='The depth of directories to write in outputs')
 
     out_opts = parser.add_argument_group('Output Options')
     out_opts.add_argument('-w', '--write', action='store_true',

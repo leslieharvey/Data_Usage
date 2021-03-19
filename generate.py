@@ -9,7 +9,7 @@ def drawProgressBar(percent, barLen = 20):
     sys.stdout.write("[{:<{}}] {:.0f}%".format("=" * int(barLen * percent), barLen, percent * 100))
     sys.stdout.flush()
 
-def createOutput(run_path, error_log):
+def createOutput(run_path, error_log, depth_limit=-1):
     # get a list of all the files in the root directory
     file_nav = FileNav(run_path)
     file_list = file_nav.get_files(recurse=True)
@@ -38,7 +38,7 @@ def createOutput(run_path, error_log):
     owner_data = {}
     for o in owners:
         owner_data[o] = round(owners[o].memory_size, 2)
-        createOwnerHTML(o, owners[o])
+        createOwnerHTML(o, owners[o], depth_limit)
 
     # sort owner_data in descending order
     sorted_owner_data = {k: v for k, v in sorted(owner_data.items(), key=lambda item: item[1], reverse=True)}
@@ -52,15 +52,16 @@ def createOutput(run_path, error_log):
 
     return owners
 
-def writeOwnerData(owner_data, file_name="file_tree.txt"):
+def writeOwnerFileTree(owner_data, file_name="file_tree.txt", depth_limit=-1):
     with open(file_name, "w") as f_tree:
         for o in owner_data:
             f_tree.write("-----" + o + "-----" + "\n")
-            owner_data[o].write_node_data(f_tree)
+            owner_data[o].write_node_data(f_tree, depth_limit=depth_limit)
             f_tree.write("\n")
 
-def createOwnerHTML(name, owner_root):
-    owner_largest_directories = owner_root.largest_directories(4)
+def createOwnerHTML(name, owner_root, depth_limit=-1):
+    # retrieve the 4 largest directories
+    owner_largest_directories = owner_root.largest_directories(depth_limit)
     owner_data = {}
     for directory in owner_largest_directories : owner_data[directory.path] = directory.memory_size
     

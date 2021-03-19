@@ -38,10 +38,13 @@ class TreeNode:
     This class contains all the information to construct a TreeNode object. A 
     TreeNode object represents a directory of a file system.
 
-    Attributes:    
+    Attributes: 
+        level_name (str): The name of the level
+        path (str): The path taken to get to the level   
         owner (str): The name of the owner of the file
         files (dict): The files in the TreeNode object
         directories (dict): The directories in the TreeNode object
+        memory_size (float): The amount of memory the level consumes
     """
     def __init__(self, owner, level_name = "ROOT", from_path = ""):
         self.level_name = level_name
@@ -112,7 +115,7 @@ class TreeNode:
         for f in self.files:
             self.files[f].print_file_data(increased_indent)
 
-    def write_node_data(self, file, indent="", directory="ROOT"):
+    def write_node_data(self, file, indent="", directory="ROOT", depth_limit=-1, current_level=0):
         """
         This function writes the created file structure in an user friendly format
 
@@ -120,12 +123,17 @@ class TreeNode:
             file (IO): the file to write the node data to
             indent (str): The amount of indent to make the output user friendly
             directory (str): The name of the current directory
+            depth_limit (int): The depth limit of directories to write
+            current_level (int): The current level of directories traversed
         """
+        if current_level > depth_limit and depth_limit != -1:
+            return
+
         increased_indent = "   " + indent
 
         file.write(indent + "=> " + directory + " (" + str(self.memory_size) + " GB)" + "\n")
         for d in self.directories:
-            self.directories[d].write_node_data(file, increased_indent, d)
+            self.directories[d].write_node_data(file, increased_indent, d, current_level=current_level + 1, depth_limit=depth_limit)
       
         for f in self.files:
             self.files[f].write_file_data(file, increased_indent)
