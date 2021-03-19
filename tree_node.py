@@ -172,43 +172,33 @@ class TreeNode:
 
         return return_directories
 
-    def largest_files(self, amount_limit = -1):
+    def largest_files(self):
         """
         This function will return the largest files relative to the TreeNode position
         the function is called on. The return will include files at the current level.
         The returned list will be ordered in a decresing format.
-
-        Args:
-            amount_limit (list): The limit of largest files to return. If no value 
-                specified, all files are returned
         
         Returns:
             list: A list of TreeNode objects representing the largest files
         """
 
         all_files = self.__get_files_including_sub_directories([])
-        sorted_files = sorted(all_files, key=lambda item: item.file_size, reverse=True)
         
-        return sorted_files if amount_limit == -1 else sorted_files[:amount_limit]
+        return all_files
 
-    def largest_directories(self, amount_limit = -1):
+    def largest_directories(self):
         """
         This function will return the largest directories relative to the TreeNode position
         the function is called on. The return will not include the TreeNode (directory) it
         is called on. The returned list will be ordered in a decresing format.
-
-        Args:
-            amount_limit (list): The limit of largest directories to return. If no value 
-                specified, all directories are returned
         
         Returns:
             list: A list of TreeNode objects representing the largest directories
         """
 
         all_directories = self.__get_directories_including_sub_directories([])
-        sorted_directories = sorted(all_directories, key=lambda item: item.memory_size, reverse=True)
         
-        return sorted_directories if amount_limit == -1 else sorted_directories[:amount_limit]
+        return all_directories
         
     
     

@@ -104,10 +104,13 @@ def createOwnerHTML(name, owner_root, depth_limit=-1):
     # ex: gather largest directories at ROOT/leslie.harvey
     owner_largest_directories = []
     for d in owner_root.directories.values():
-        owner_largest_directories += d.largest_directories(depth_limit)
+        owner_largest_directories += d.largest_directories()
     
+    sorted_directories = sorted(owner_largest_directories, key=lambda item: item.memory_size, reverse=True)
+    sorted_directories = sorted_directories if depth_limit == -1 else sorted_directories[:depth_limit]
+
     owner_data = {}
-    for directory in owner_largest_directories : owner_data[directory.path] = directory.memory_size
+    for directory in sorted_directories : owner_data[directory.path] = directory.memory_size
     
     # create overall HTML file
     html_data = HTMLTemplate.create_html("Largest Directories - " + name, "Directory Path", "Data Usage (GB)", owner_data)
