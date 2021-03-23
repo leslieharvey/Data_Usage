@@ -1,6 +1,7 @@
 from tree_node import TreeNode
 from file_nav import FileNav
 from template import HTMLTemplate
+from collections import OrderedDict
 import sys
 
 def __drawProgressBar(percent, bar_length = 20):
@@ -58,7 +59,9 @@ def createOutput(run_path, error_log, depth_limit=-1):
 
     # sort owner_data in descending order
     owner_items_list = sorted(owner_data.items(), key=lambda item: item[1], reverse=True)
-    sorted_owner_data = {k: v for k, v in owner_items_list}
+    sorted_owner_data = OrderedDict()
+    for key, value in owner_items_list:
+        sorted_owner_data[key] = value
 
     # create overall HTML file
     html_data = HTMLTemplate.create_html("Member Usage", "Username", "Data Usage (GB)", sorted_owner_data)
@@ -109,7 +112,7 @@ def createOwnerHTML(name, owner_root, depth_limit=-1):
     sorted_directories = sorted(owner_largest_directories, key=lambda item: item.memory_size, reverse=True)
     sorted_directories = sorted_directories if depth_limit == -1 else sorted_directories[:depth_limit]
 
-    owner_data = {}
+    owner_data = OrderedDict()
     for directory in sorted_directories : owner_data[directory.path] = round(directory.memory_size, 1)
     
     # create overall HTML file
