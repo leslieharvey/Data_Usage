@@ -46,7 +46,7 @@ class TreeNode:
         directories (dict): The directories in the TreeNode object
         memory_size (float): The amount of memory the level consumes
     """
-    def __init__(self, owner, level_name = "ROOT", from_path = ""):
+    def __init__(self, owner, level_name = "[...]", from_path = ""):
         self.level_name = level_name
         self.path = from_path + level_name + "/"
         self.owner = owner
@@ -98,7 +98,7 @@ class TreeNode:
 
             self.__insert_file(self.owner, element, file_size)
 
-    def print_node_data(self, indent="", directory="ROOT"):
+    def print_node_data(self, indent="", directory="[...]"):
         """
         This function prints the created file structure in an user friendly format
 
@@ -115,7 +115,7 @@ class TreeNode:
         for f in self.files:
             self.files[f].print_file_data(increased_indent)
 
-    def write_node_data(self, file, indent="", directory="ROOT", depth_limit=-1, current_level=0):
+    def write_node_data(self, file, indent="", directory="[...]", depth_limit=-1, current_level=0):
         """
         This function writes the created file structure in an user friendly format
 
