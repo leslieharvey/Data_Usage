@@ -53,7 +53,7 @@ def createOutput(run_path, error_log, depth_limit=-1):
     # structure owner data into required format
     owner_data = {}
     for o in owners:
-        owner_data[o] = round(owners[o].memory_size, 2)
+        owner_data[o] = round(owners[o].memory_size, 1)
         createOwnerHTML(o, owners[o], depth_limit)
 
     # sort owner_data in descending order
