@@ -95,9 +95,13 @@ def emailSender():
               sender_email, user_email, user_message.as_string()
           )
 
+          print("User email sent to " + user_email)
+
           # Personal HTML result sent, must send group result to specified user
           group_message = messageConfig(sender_email, user_email, text, group_html_content)
 
           server.sendmail(
               sender_email, user_email, group_message.as_string()
           )
+
+          print("Group email sent to " + user_email)
