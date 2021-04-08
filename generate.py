@@ -2,6 +2,7 @@ from tree_node import TreeNode
 from file_nav import FileNav
 from template import HTMLTemplate
 from collections import OrderedDict
+from datetime import datetime
 import sys
 
 def __drawProgressBar(percent, bar_length = 20):
@@ -31,6 +32,8 @@ def createOutput(run_path, error_log, depth_limit=-1):
     file_nav = FileNav(run_path)
     file_list = file_nav.get_files(recurse=True)
     owners = {}
+
+    current_date = datetime.today().strftime('%Y-%m-%d')
 
     # each file is processed into a TreeNode structure
     for i, file_path in enumerate(file_list):
@@ -64,7 +67,7 @@ def createOutput(run_path, error_log, depth_limit=-1):
         sorted_owner_data[key] = value
 
     # create overall HTML file
-    html_data = HTMLTemplate.create_html("Member Usage", "Username", "Data Usage (GB)", sorted_owner_data)
+    html_data = HTMLTemplate.create_html("Member Usage (" + current_date + ")", "Username", "Data Usage (GB)", sorted_owner_data)
 
     # write HTML file with all aggregated data
     with open("result.html", "w") as f_html:
@@ -116,7 +119,8 @@ def createOwnerHTML(name, owner_root, depth_limit=-1):
     for directory in sorted_directories : owner_data[directory.path] = round(directory.memory_size, 1)
     
     # create overall HTML file
-    html_data = HTMLTemplate.create_html("Largest Directories - " + name, "Directory Path", "Data Usage (GB)", owner_data)
+    current_date = datetime.today().strftime('%Y-%m-%d')
+    html_data = HTMLTemplate.create_html("Largest Directories (" + current_date + ") - " + name, "Directory Path", "Data Usage (GB)", owner_data)
 
     # write HTML file with all aggregated data
     with open(name + "_result.html", "w") as f_html:
