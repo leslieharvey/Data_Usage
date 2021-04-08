@@ -137,3 +137,5 @@ file_tree.txt
 scp.txt
 
 Tx_Files/*
+email_info.txt
+email_info.py

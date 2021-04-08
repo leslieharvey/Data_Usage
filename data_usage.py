@@ -11,6 +11,7 @@ from tree_node import TreeNode
 from file_nav import FileNav
 from template import HTMLTemplate
 from generate import createOutput, writeOwnerFileTree
+from email_config import emailSender
 
 DEFAULT_PATH = os.path.dirname(os.path.abspath(__file__))
 DEFAULT_DEPTH = 4
@@ -32,6 +33,10 @@ def main_function(f, **kwargs):
     if kwargs['write']:
         # -----Write File Structure-----
         writeOwnerFileTree(owner_data, depth_limit=kwargs['depth'])
+    
+    if kwargs['email']:
+        # ---------Send Emails----------
+        emailSender()
 
 def _dir_exists(dir_name, dir_type=''):
     """
@@ -68,6 +73,8 @@ def parse_args(print_help=False):
     out_opts = parser.add_argument_group('Output Options')
     out_opts.add_argument('-w', '--write', action='store_true',
                           help=('Write the file tree structure to text file'))
+    out_opts.add_argument('-e', '--email', action='store_true',
+                          help=('Send results via email to specified users'))
 
     if print_help:
         parser.print_help()
