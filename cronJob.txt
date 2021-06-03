@@ -1,0 +1,11 @@
+SET UP 
+------------
+crontab -e 
+
+*/10 * * * * /usr/bin/python data_usage.py
+
+# Run bi weekly 3 am on Monday
+
+
+// Run every day at 2:00pm, PATH_NAME is inputted, it will write and send emails
+0 14 * * * /usr/bin/python data_usage.py --path {PATH_NAME} -w -e 

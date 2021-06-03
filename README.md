@@ -8,4 +8,4 @@ This project aims to automate the data usage report generation of shared folder.
 2. Create _email_info.py_ and store the sender email address login information in the relevant variables.
    - server_email
    - server_email_password
-3. Run intended commands via _data_usage.csv_
+3. Run intended commands via _data_usage.py_
