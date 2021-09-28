@@ -15,7 +15,7 @@ from email_config import emailSender
 
 DEFAULT_PATH = os.path.dirname(os.path.abspath(__file__))
 # Depth of 0 indicates the directories at the root level are computed
-DEFAULT_DEPTH = 0
+DEFAULT_DEPTH = 1
 DEFAULT_LIMIT = 20
 
 if __name__ == '__main__':
