@@ -5,7 +5,8 @@ from collections import OrderedDict
 from datetime import datetime
 import sys
 
-def __drawProgressBar(percent, bar_length = 20):
+
+def __drawProgressBar(percent, bar_length=20):
     """
     This function will draw a progress status bar
 
@@ -13,12 +14,14 @@ def __drawProgressBar(percent, bar_length = 20):
         percent (float): The percent of the operation completed.
         bar_length (int): The length of the desired progress bar.
     """
-    # percent float from 0 to 1. 
+    # percent float from 0 to 1.
     sys.stdout.write("\r")
-    sys.stdout.write("[{:<{}}] {:.0f}%".format("=" * int(bar_length * percent), bar_length, percent * 100))
+    sys.stdout.write("[{:<{}}] {:.0f}%".format(
+        "=" * int(bar_length * percent), bar_length, percent * 100))
     sys.stdout.flush()
 
-def createOutput(run_path, error_log, depth_limit=-1):
+
+def createOutput(run_path, error_log, depth_limit=-1, length_limit=-1):
     """
     This function creates the output of the overall script
 
@@ -26,6 +29,7 @@ def createOutput(run_path, error_log, depth_limit=-1):
         run_path (str): The complete path of the target directory.
         error_log (IO): The IO file to write errors to.
         depth_limit (int): The depth limit to write for the outputs
+        length_limit (int): The length limit to write for the user's output
     """
 
     # get a list of all the files in the root directory
@@ -45,9 +49,9 @@ def createOutput(run_path, error_log, depth_limit=-1):
             error_log.write("Could not open: " + file_path + "\n")
             continue
         except(KeyError):
-            error_log.write("Key Error for: " + file_path+ "\n")
+            error_log.write("Key Error for: " + file_path + "\n")
             continue
-        
+
         if file_owner not in owners:
             owners[file_owner] = TreeNode(file_owner)
 
@@ -58,22 +62,25 @@ def createOutput(run_path, error_log, depth_limit=-1):
     owner_data = {}
     for o in owners:
         owner_data[o] = round(owners[o].memory_size, 1)
-        createOwnerHTML(o, owners[o], depth_limit)
+        createOwnerHTML(o, owners[o], depth_limit, length_limit)
 
     # sort owner_data in descending order
-    owner_items_list = sorted(owner_data.items(), key=lambda item: item[1], reverse=True)
+    owner_items_list = sorted(
+        owner_data.items(), key=lambda item: item[1], reverse=True)
     sorted_owner_data = OrderedDict()
     for key, value in owner_items_list:
         sorted_owner_data[key] = value
 
     # create overall HTML file
-    html_data = HTMLTemplate.create_html("Member Usage (" + current_date + ")", "Username", "Data Usage (GB)", sorted_owner_data)
+    html_data = HTMLTemplate.create_html(
+        "Member Usage (" + current_date + ")", "Username", "Data Usage (GB)", sorted_owner_data)
 
     # write HTML file with all aggregated data
     with open("result.html", "w") as f_html:
         f_html.write(html_data)
 
     return owners
+
 
 def writeOwnerFileTree(owner_data, file_name="file_tree.txt", depth_limit=-1):
     """
@@ -97,30 +104,36 @@ def writeOwnerFileTree(owner_data, file_name="file_tree.txt", depth_limit=-1):
             owner_data[o].write_node_data(f_tree, depth_limit=depth_limit)
             f_tree.write("\n")
 
-def createOwnerHTML(name, owner_root, depth_limit=-1):
+
+def createOwnerHTML(name, owner_root, depth_limit=-1, length_limit=-1):
     """
     This function creates an HTML output for each owner
 
     Args:
         owner_root (TreeNode): The TreeNode root object for the specified owner
         depth_limit (int): The depth limit to write for the outputs
+        length_limit (int): The length limit to write for the user's output
     """
     # retrieve the largest directories
     # note: because of project requirements, this syntax will traverse the sub-directory of a user's folder
     # ex: gather largest directories at ROOT/leslie.harvey
     owner_largest_directories = []
     for d in owner_root.directories.values():
-        owner_largest_directories += d.largest_directories()
-    
-    sorted_directories = sorted(owner_largest_directories, key=lambda item: item.memory_size, reverse=True)
-    sorted_directories = sorted_directories if depth_limit == -1 else sorted_directories[:depth_limit]
+        owner_largest_directories += d.largest_directories(depth_limit)
+
+    sorted_directories = sorted(
+        owner_largest_directories, key=lambda item: item.memory_size, reverse=True)
+    sorted_directories = sorted_directories if length_limit == - \
+        1 else sorted_directories[:length_limit]
 
     owner_data = OrderedDict()
-    for directory in sorted_directories : owner_data[directory.path] = round(directory.memory_size, 1)
-    
+    for directory in sorted_directories:
+        owner_data[directory.path] = round(directory.memory_size, 1)
+
     # create overall HTML file
     current_date = datetime.today().strftime('%Y-%m-%d')
-    html_data = HTMLTemplate.create_html("Largest Directories (" + current_date + ") - " + name, "Directory Path", "Data Usage (GB)", owner_data)
+    html_data = HTMLTemplate.create_html(
+        "Largest Directories (" + current_date + ") - " + name, "Directory Path", "Data Usage (GB)", owner_data)
 
     # write HTML file with all aggregated data
     with open(name + "_result.html", "w") as f_html:
