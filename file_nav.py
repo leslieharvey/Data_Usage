@@ -84,6 +84,6 @@ class FileNav:
             filename (str): The path of the file to retrieve the information of.
 
         Returns:
-            int: Memory used, in GB, by file.
+            int: Memory used, in bytes, by file.
         """
-        return float(stat(filename).st_size / float(pow(10, 9)))
+        return stat(filename).st_size

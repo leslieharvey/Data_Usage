@@ -8,13 +8,13 @@ class File:
     Attributes:    
         owner (str): The name of the owner of the file
         file_name (str): The name of the file that the object referes to
-        file_size (float): The size of the file in gigabytes
+        file_size (float): The size of the file in bytes
     """
 
     def __init__(self, owner, file_name, file_size):
         self.owner = owner
         self.file_name = file_name
-        self.file_size = file_size
+        self.file_size = file_size / pow(10, 9)
 
     def print_file_data(self, indent):
         """
@@ -48,7 +48,7 @@ class TreeNode:
         owner (str): The name of the owner of the file
         files (dict): The files in the TreeNode object
         directories (dict): The directories in the TreeNode object
-        memory_size (float): The amount of memory the level consumes
+        memory_size (int): The amount of memory the level consumes
     """
 
     def __init__(self, owner, level_name="[...]", from_path=""):
@@ -57,7 +57,7 @@ class TreeNode:
         self.owner = owner
         self.files = {}
         self.directories = {}
-        self.memory_size = 0.0
+        self.memory_size = 0
 
     def __insert_file(self, owner, file_name, file_size):
         """
@@ -66,9 +66,12 @@ class TreeNode:
         Args:
             owner (str): The name of the owner of the file
             file_name (str): The name of the file to insert
-            file_size (str): The size (GB) of the file to insert
+            file_size (str): The size (bytes) of the file to insert
         """
         self.files[file_name] = File(owner, file_name, file_size)
+
+    def get_memory_size_GB(self):
+        return self.memory_size / pow(10, 9)
 
     def create_node(self, root_path, file_path, file_size):
         """
@@ -77,7 +80,7 @@ class TreeNode:
         Args:
             root_path (str): The root path of the inital search
             file_path (str): The path of the file to retrieve the information of
-            file_size (str): The size (GB) of the file to insert
+            file_size (str): The size (bytes) of the file to insert
         """
         if root_path[:-1] != "/":
             root_path += "/"
@@ -116,7 +119,7 @@ class TreeNode:
         increased_indent = "   " + indent
 
         print(indent + "=> " + directory +
-              " (" + str(self.memory_size) + " GB)")
+              " (" + str(self.get_memory_size_GB()) + " GB)")
         for d in self.directories:
             self.directories[d].print_node_data(increased_indent, d)
 
@@ -135,7 +138,7 @@ class TreeNode:
             current_level (int): The current level of directories traversed
         """
         file.write(indent + "=> " + directory +
-                   " (" + str(self.memory_size) + " GB)" + "\n")
+                   " (" + str(self.get_memory_size_GB()) + " GB)" + "\n")
 
         if current_level > depth_limit and depth_limit != -1:
             return

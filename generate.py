@@ -61,7 +61,7 @@ def createOutput(run_path, error_log, depth_limit=-1, length_limit=-1):
     # structure owner data into required format
     owner_data = {}
     for o in owners:
-        owner_data[o] = round(owners[o].memory_size, 1)
+        owner_data[o] = round(owners[o].get_memory_size_GB(), 1)
         createOwnerHTML(o, owners[o], depth_limit, length_limit)
 
     # sort owner_data in descending order
@@ -122,13 +122,13 @@ def createOwnerHTML(name, owner_root, depth_limit=-1, length_limit=-1):
         owner_largest_directories += d.largest_directories(depth_limit)
 
     sorted_directories = sorted(
-        owner_largest_directories, key=lambda item: item.memory_size, reverse=True)
+        owner_largest_directories, key=lambda item: item.get_memory_size_GB(), reverse=True)
     sorted_directories = sorted_directories if length_limit == - \
         1 else sorted_directories[:length_limit]
 
     owner_data = OrderedDict()
     for directory in sorted_directories:
-        owner_data[directory.path] = round(directory.memory_size, 1)
+        owner_data[directory.path] = round(directory.get_memory_size_GB(), 1)
 
     # create overall HTML file
     current_date = datetime.today().strftime('%Y-%m-%d')
