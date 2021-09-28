@@ -7,6 +7,7 @@ from pwd import getpwuid
 # Based on:
 # https://stackoverflow.com/questions/3207219/how-do-i-list-all-files-of-a-directory
 
+
 class FileNav:
     """
     This class contains all the information needed to navigate a file system to 
@@ -15,6 +16,7 @@ class FileNav:
     Attributes:    
         current_path (dict): The current path of the FileNav class.
     """
+
     def __init__(self, path):
         self.current_path = path
 
@@ -33,8 +35,9 @@ class FileNav:
         for (dirpath, _, filenames) in walk(self.current_path):
             sys.stdout.write("\r")
             sys.stdout.write("Executing...")
-            
-            filenames_with_path = [os.path.join(dirpath, name) for name in filenames]
+
+            filenames_with_path = [os.path.join(
+                dirpath, name) for name in filenames]
             files.extend(filenames_with_path)
 
             sys.stdout.flush()

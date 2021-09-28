@@ -93,7 +93,7 @@ class HTMLTemplate:
         """
         This function returns a string of the top portion of the HTML template
         """
-        return self.top_sub_1 + self.section_label + self.top_sub_2 + self.left_justify_label + self.top_sub_3 + self.right_justify_label  + self.top_sub_4
+        return self.top_sub_1 + self.section_label + self.top_sub_2 + self.left_justify_label + self.top_sub_3 + self.right_justify_label + self.top_sub_4
 
     def __create_table_row(self, left_justify, right_justify):
         """
@@ -188,6 +188,7 @@ class HTMLTemplate:
         Returns:
             str: A str representing the complete HTML template compiled from dyanmic data
         """
-        html = cls(section_label, left_justify_label, right_justify_label, data)
+        html = cls(section_label, left_justify_label,
+                   right_justify_label, data)
         data_rows = html.__create_data_rows(data)
         return html.__create_top_labels() + data_rows + html.bottom
