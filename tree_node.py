@@ -1,5 +1,7 @@
 from file_nav import FileNav
 
+BYTES_IN_GB = 1073741824
+
 
 class File:
     """
@@ -14,7 +16,7 @@ class File:
     def __init__(self, owner, file_name, file_size):
         self.owner = owner
         self.file_name = file_name
-        self.file_size = file_size / pow(10, 9)
+        self.file_size = file_size / BYTES_IN_GB
 
     def print_file_data(self, indent):
         """
@@ -71,7 +73,7 @@ class TreeNode:
         self.files[file_name] = File(owner, file_name, file_size)
 
     def get_memory_size_GB(self):
-        return self.memory_size / pow(10, 9)
+        return float(self.memory_size / BYTES_IN_GB)
 
     def create_node(self, root_path, file_path, file_size):
         """
