@@ -14,7 +14,8 @@ from generate import createOutput, writeOwnerFileTree
 from email_config import emailSender
 
 DEFAULT_PATH = os.path.dirname(os.path.abspath(__file__))
-DEFAULT_DEPTH = 1
+# Depth of 0 indicates the directories at the root level are computed
+DEFAULT_DEPTH = 0
 DEFAULT_LIMIT = 20
 
 if __name__ == '__main__':
